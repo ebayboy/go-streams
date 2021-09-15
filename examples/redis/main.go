@@ -43,7 +43,7 @@ func main() {
 	ctx, cancelFunc := context.WithCancel(context.Background())
 
 	//after 5 second, exit process
-	timer := time.NewTimer(time.Second * 5)
+	timer := time.NewTimer(time.Minute * 5)
 	go func() {
 		select {
 		case <-timer.C:
