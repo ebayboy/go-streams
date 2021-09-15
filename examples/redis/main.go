@@ -30,12 +30,18 @@ func testSubpub(ctx *context.Context) {
 		DB:       0,                // use default DB
 	}
 
+	//source
 	source, err := ext.NewRedisSource((*ctx), config, "chanin")
 
 	util.Check(err)
+
+	//flow
 	flow1 := flow.NewMap(toUpper, 1)
+
+	//sink
 	sink := ext.NewRedisSink(config, "chanout")
 
+	//via
 	source.Via(flow1).To(sink)
 }
 
