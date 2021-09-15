@@ -18,8 +18,16 @@ import (
 
 var toUpper = func(in interface{}) interface{} {
 	msg := in.(*redis.Message)
-	fmt.Println("msg:", msg)
+	fmt.Println("toUpper msg:", msg)
 	return strings.ToUpper(msg.Payload)
+}
+
+var appendSuffix = func(in interface{}) interface{} {
+	msg := in.(string)
+	fmt.Println("msg:", msg)
+	msg = msg + "_Suffix"
+	fmt.Println("appendSuffix msg:", msg)
+	return msg
 }
 
 //Process:  sub chanin -> ToUpper -> pub chanout
@@ -35,14 +43,17 @@ func testSubpub(ctx *context.Context) {
 
 	util.Check(err)
 
-	//flow
+	//flow1
 	flow1 := flow.NewMap(toUpper, 1)
+
+	//flow2
+	flow2 := flow.NewMap(appendSuffix, 1)
 
 	//sink
 	sink := ext.NewRedisSink(config, "chanout")
 
 	//via
-	source.Via(flow1).To(sink)
+	source.Via(flow1).Via(flow2).To(sink)
 }
 
 func main() {
