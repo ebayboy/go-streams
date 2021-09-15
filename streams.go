@@ -14,7 +14,7 @@ type Outlet interface {
 
 // A Source is a set of stream processing steps that has one open output.
 type Source interface {
-	Outlet
+	Outlet //匿名属性, 相当于展开Outlet
 	Via(Flow) Flow
 }
 
